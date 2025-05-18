@@ -1,0 +1,15 @@
+pwd
+ls
+whoami
+
+echo "Let Build docker image"
+sleep 30
+docker build -t adityabansule/naru .
+docker login -u adityabansule -p 
+docker push adityabansule/naru
+docker ps -a | grep 'mycontainer' && docker stop mycontainer && docker rm mycontainer
+docker run --name mycontainer -d -p 80:80 adityabansule/naru:latest
+sleep 20
+ssh admin@172.31.42.80 "docker ps -a | grep 'mycontainer' && docker stop 'mycontainer' && docker rm 'mycontainer'"
+ssh admin@172.31.42.80 "docker pull adityabansule/naru:latest && docker run --name 'mycontainer' -d -p 80:80 adityabansule/naru:latest"
+echo "Build Successfull"
